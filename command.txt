@@ -1,0 +1,69 @@
+# configure aws key id and secret
+$ aws configure
+
+# see available region
+$ aws ec2 describe-regions --output table
+
+# make security group name
+$ aws ec2 create-security-group --group-name groupname --description "groupdescription"
+
+# open port for instances
+$ aws ec2 authorize-security-group-ingress --group-name groupname --protocol tcp --port 22 --cidr 0.0.0.0/0
+//for ssh
+$ aws ec2 authorize-security-group-ingress --group-name groupname --protocol tcp --port 443 --cidr 0.0.0.0/0
+//for https
+$ aws ec2 authorize-security-group-ingress --group-name groupname --protocol tcp --port 80 --cidr 0.0.0.0/0
+//for http
+$ aws ec2 authorize-security-group-ingress --group-name groupname --protocol tcp --port 3389 --cidr 0.0.0.0/0
+//for rdp
+
+# create keypair
+$ aws ec2 create-key-pair --key-name yourkeyname --query "KeyMaterial" --output text > yourkey.pem
+
+# make instances
+$ aws ec2 run-instances --image-id ami-xxxxx --security-group-ids sg-xxxx --instance-type t2.selected-size --key-name yourkeyname
+
+# ami for windows image
+ami-0eb7fbcc77e5e6ec6 us east 1
+ami-0ca69a9d06da3835d us east 2
+ami-069a83c17d7d386f1 us west 1
+ami-0afb7a78e89642197 us west 2
+ami-0f438f5108bf5217e ap south 1
+ami-0fee0e1c557356f3a ap northeast 2
+ami-0df7f7be955d146cc ap southeast 1
+ami-0a5d1d750ffda976d ap southeast 2
+ami-084fe034b5f2eb275 ap northeast 1
+ami-00dd0737502449ce1 ca central 1
+ami-051bdd1b48a1fe0e7 eu central 1
+ami-03acdf9028d28249e eu west 1
+ami-0aac9d7fa83beb6d2 eu west 2
+ami-0b250a0a9fb2dcfa7 eu west 3
+ami-024273c298b16e2c6 eu north 1
+ami-02332b2f1df42b407 sa east 1
+
+# ami for ubuntu image
+ami-0dba2cb6798deb6d8 us east 1
+ami-07efac79022b86107 us east 2
+ami-03fac5402e10ea93b us west 1
+ami-07a29e5e945228fa1 us west 2
+ami-0cda377a1b884a1bc ap south 1
+ami-044057cb1bc4ce527 ap northeast 2
+ami-093da183b859d5a4b ap southeast 1
+ami-0f158b0f26f18e619 ap southeast 2
+ami-09b86f9709b3c33d4 ap northeast 1
+ami-0edab43b6fa892279 ca central 1
+ami-0c960b947cbb2dd16 eu central 1
+ami-06fd8a495a537da8b eu west 1
+ami-05c424d59413a2876 eu west 2
+ami-078db6d55a16afc82 eu west 3
+ami-008dea09a148cea39 eu north 1
+ami-02dc8ad50da58fffd sa east 1
+
+# find  public ip address
+$ aws ec2 describe-instances --instance-ids i-xxxxxx --query "Reservations[0].Instances[0].PublicIpAddress"
+
+# get password data (rdp only)
+$ aws ec2 get-password-data --instance-id  i-xxxxx 
+$ aws ec2 get-password-data --instance-id  i-xxxxx --priv-launch-key yourkey.pem
+
+for vps ubuntu login, check decrypt-passwd.txt files in this repository
